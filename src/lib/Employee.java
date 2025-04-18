@@ -1,5 +1,6 @@
 package lib;
 
+import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.LinkedList;
@@ -89,17 +90,36 @@ public class Employee {
 		childIdNumbers.add(childIdNumber);
 	}
 	
+	// ======================= START REFACTORING 1 : LongMethod =======================
+	// Method getAnnualIncomeTax() terlalu panjang, sebaiknya dipecah menjadi beberapa method kecil
+
 	public int getAnnualIncomeTax() {
 		
 		//Menghitung berapa lama pegawai bekerja dalam setahun ini, jika pegawai sudah bekerja dari tahun sebelumnya maka otomatis dianggap 12 bulan.
-		LocalDate date = LocalDate.now();
-		
-		if (date.getYear() == yearJoined) {
-			monthWorkingInYear = date.getMonthValue() - monthJoined;
-		}else {
-			monthWorkingInYear = 12;
-		}
-		
-		return TaxFunction.calculateTax(monthlySalary, otherMonthlyIncome, monthWorkingInYear, annualDeductible, spouseIdNumber.equals(""), childIdNumbers.size());
+		monthWorkingInYear = calculateMonthsWorkedThisYear();
+
+		return TaxFunction.calculateTax(
+			monthlySalary,
+			otherMonthlyIncome,
+			monthWorkingInYear,
+			annualDeductible,
+			isMarried(),
+			childIdNumbers.size()
+		);
 	}
+
+	private int calculateMonthsWorkedThisYear() {
+		LocalDate date = LocalDate.now();
+		if (date.getYear() == yearJoined) {
+			return date.getMonthValue() - monthJoined;
+		} else {
+			return 12;
+		}
+	}
+
+	private boolean isMarried() {
+		return spouseIdNumber != null && !spouseIdNumber.equals("");
+	}
+	
+	// ======================== END REFACTORING 1 : LongMethod ========================
 }
