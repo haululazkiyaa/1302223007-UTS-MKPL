@@ -15,30 +15,30 @@ public class TaxFunction {
 	 */
 	
 	
-	public static int calculateTax(int monthlySalary, int otherMonthlyIncome, int numberOfMonthWorking, int deductible, boolean isMarried, int numberOfChildren) {
-		
-		int tax = 0;
-		
-		if (numberOfMonthWorking > 12) {
-			System.err.println("More than 12 month working per year");
-		}
-		
-		if (numberOfChildren > 3) {
-			numberOfChildren = 3;
-		}
-		
-		if (isMarried) {
-			tax = (int) Math.round(0.05 * (((monthlySalary + otherMonthlyIncome) * numberOfMonthWorking) - deductible - (54000000 + 4500000 + (numberOfChildren * 1500000))));
-		}else {
-			tax = (int) Math.round(0.05 * (((monthlySalary + otherMonthlyIncome) * numberOfMonthWorking) - deductible - 54000000));
-		}
-		
-		if (tax < 0) {
-			return 0;
-		}else {
-			return tax;
-		}
-			 
-	}
+	 public static int calculateTax(TaxData data) {
+		int monthlyIncome = data.getMonthlySalary() + data.getOtherMonthlyIncome();
+		int annualIncome = monthlyIncome * data.getMonthsWorked();
+		int taxableIncome = annualIncome - data.getAnnualDeductible();
 	
+		int tax = 0;
+		if (taxableIncome <= 50000000) {
+			tax = (int)(taxableIncome * 0.05);
+		} else if (taxableIncome <= 250000000) {
+			tax = (int)(50000000 * 0.05 + (taxableIncome - 50000000) * 0.15);
+		} else if (taxableIncome <= 500000000) {
+			tax = (int)(50000000 * 0.05 + 200000000 * 0.15 + (taxableIncome - 250000000) * 0.25);
+		} else {
+			tax = (int)(50000000 * 0.05 + 200000000 * 0.15 + 250000000 * 0.25 + (taxableIncome - 500000000) * 0.3);
+		}
+	
+		// Pengurangan pajak
+		if (data.isMarried()) {
+			tax -= 4500000;
+		}
+	
+		tax -= 4500000 * data.getNumberOfChildren();
+	
+		// Cegah negatif
+		return Math.max(tax, 0);
+	}
 }
