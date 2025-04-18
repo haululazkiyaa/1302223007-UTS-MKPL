@@ -26,15 +26,11 @@ public class Employee {
 	private int otherMonthlyIncome;
 	private int annualDeductible;
 	
-	private String spouseName;
-	private String spouseIdNumber;
+	// private String spouseName;
+	// private String spouseIdNumber;
 
-	private List<String> childNames;
-	private List<String> childIdNumbers;
-	
-	// ======================= START REFACTORING 2 : PrimitiveObsession =======================
-	// Class Employee terlalu banyak menggunakan tipe data primitif (int, boolean, String) 
-	// untuk menyimpan data yang semestinya bisa dikelompokkan dalam objek atau enum.
+	// private List<String> childNames;
+	// private List<String> childIdNumbers;
 	
 	public enum Gender {
 		MALE, FEMALE
@@ -42,6 +38,10 @@ public class Employee {
 	
 	private LocalDate joinedDate;
 	private Gender gender;
+
+	private Spouse spouse;
+	private List<Child> children;
+
 	
 	public Employee(String employeeId, String firstName, String lastName, String idNumber, String address,
                 int yearJoined, int monthJoined, int dayJoined, boolean isForeigner, Gender gender) {
@@ -54,16 +54,8 @@ public class Employee {
 		this.isForeigner = isForeigner;
 		this.gender = gender;
 
-		childNames = new LinkedList<>();
-		childIdNumbers = new LinkedList<>();
+		children = new LinkedList<>();
 	}
-
-	// ======================= END REFACTORING 2 : PrimitiveObsession =======================
-	
-	/**
-	 * Fungsi untuk menentukan gaji bulanan pegawai berdasarkan grade kepegawaiannya (grade 1: 3.000.000 per bulan, grade 2: 5.000.000 per bulan, grade 3: 7.000.000 per bulan)
-	 * Jika pegawai adalah warga negara asing gaji bulanan diperbesar sebanyak 50%
-	 */
 	
 	public void setMonthlySalary(int grade) {	
 		if (grade == 1) {
@@ -91,19 +83,14 @@ public class Employee {
 	public void setAdditionalIncome(int income) {	
 		this.otherMonthlyIncome = income;
 	}
-	
+
 	public void setSpouse(String spouseName, String spouseIdNumber) {
-		this.spouseName = spouseName;
-		this.spouseIdNumber = idNumber;
-	}
-	
+		this.spouse = new Spouse(spouseName, spouseIdNumber);
+	}	
+
 	public void addChild(String childName, String childIdNumber) {
-		childNames.add(childName);
-		childIdNumbers.add(childIdNumber);
+		children.add(new Child(childName, childIdNumber));
 	}
-	
-	// ======================= START REFACTORING 1 : LongMethod =======================
-	// Method getAnnualIncomeTax() terlalu panjang, sebaiknya dipecah menjadi beberapa method kecil
 
 	public int getAnnualIncomeTax() {
 		
@@ -116,7 +103,7 @@ public class Employee {
 			monthWorkingInYear,
 			annualDeductible,
 			isMarried(),
-			childIdNumbers.size()
+			children.size()
 		);
 	}
 
@@ -130,8 +117,6 @@ public class Employee {
 	}
 	
 	private boolean isMarried() {
-		return spouseIdNumber != null && !spouseIdNumber.equals("");
-	}
-
-	// ======================== END REFACTORING 1 : LongMethod ========================
+		return spouse != null && spouse.getIdNumber() != null && !spouse.getIdNumber().equals("");
+	}	
 }
