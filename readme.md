@@ -1,11 +1,14 @@
 # Tugas Besar Pengganti UTS MKEPL
 
 Disusun oleh:
+
 Muhammad Haulul Azkiyaa
+
 NIM. 1302223007
+
 Kelas SE-46-02
 
-# Refactoring Checklist: Employee.java
+# Refactoring Employee.java
 
 | **Bad Smell**                     | **Checklist** | **Keterangan**                                                                      |
 | --------------------------------- | ------------- | ----------------------------------------------------------------------------------- |
@@ -16,7 +19,7 @@ Kelas SE-46-02
 | Duplicate Code (setMonthlySalary) | ✅            | Logika penggajian disederhanakan dengan `switch` dan 1x multiplier.                 |
 | Feature Envy                      | ✅            | Logika pajak dipindahkan ke `TaxCalculator`.                                        |
 
-# Refactoring Checklist: TaxFunction.java
+# Refactoring TaxFunction.java
 
 | **Bad Smell**       | **Checklist** | **Keterangan**                                              |
 | ------------------- | ------------- | ----------------------------------------------------------- |
