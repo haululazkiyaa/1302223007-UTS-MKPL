@@ -37,25 +37,25 @@ public class Employee {
 	}
 	
 	private LocalDate joinedDate;
-	private Gender gender;
+	private PersonalInfo.Gender gender;
 
 	private Spouse spouse;
 	private List<Child> children;
 
 	
-	public Employee(String employeeId, String firstName, String lastName, String idNumber, String address,
-                int yearJoined, int monthJoined, int dayJoined, boolean isForeigner, Gender gender) {
-		this.employeeId = employeeId;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.idNumber = idNumber;
-		this.address = address;
-		this.joinedDate = LocalDate.of(yearJoined, monthJoined, dayJoined);
-		this.isForeigner = isForeigner;
-		this.gender = gender;
+	public Employee(PersonalInfo info) {
+		this.employeeId = info.getEmployeeId();
+		this.firstName = info.getFirstName();
+		this.lastName = info.getLastName();
+		this.idNumber = info.getIdNumber();
+		this.address = info.getAddress();
+		this.joinedDate = info.getJoinedDate();
+		this.isForeigner = info.isForeigner();
+		this.gender = info.getGender();
 
 		children = new LinkedList<>();
 	}
+
 	
 	public void setMonthlySalary(int grade) {	
 		if (grade == 1) {
